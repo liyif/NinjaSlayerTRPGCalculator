@@ -120,7 +120,6 @@ def render_template_editor() -> tuple[dict[str, AttackTemplate], dict[str, tuple
                     pd.DataFrame({COL_DIFFICULTY: []}, dtype=str),
                     pd.DataFrame({COL_CONDITION: [], COL_DAMAGE: [], COL_EVADE_DIFF: [], COL_ATMOSPHERE: []}, dtype=str),
                 )
-                st.rerun()
 
     # 解析后的数据容器
     parsed_templates: dict[str, AttackTemplate] = {}
@@ -140,7 +139,7 @@ def render_template_editor() -> tuple[dict[str, AttackTemplate], dict[str, tuple
 
                 if not parsed_conditions:
                     st.warning("未填入任何触发难度 或 格式不正确")
-                    continue  # 缺少条件时跳过当前分支解析
+
 
                 cond_strs = get_all_available_branch_cond_strs(parsed_conditions)
 
@@ -259,8 +258,8 @@ def render_combat_simulator(parsed_templates: dict[str, AttackTemplate]):
     st.subheader("攻击计划推演")
 
     col_dice1, col_dice2 = st.columns(2)
-    num_attack_dice = col_dice1.number_input("攻击骰数", min_value=1, max_value=20, value=10)
-    num_defense_dice = col_dice2.number_input("回避骰数", min_value=0, max_value=20, value=8)
+    num_attack_dice = col_dice1.number_input("攻击骰数 (Attack Dice)", min_value=1, max_value=20, value=10)
+    num_defense_dice = col_dice2.number_input("回避骰数 (Defense Dice)", min_value=0, max_value=20, value=8)
 
     atmosphere = st.number_input("气氛", min_value=0, max_value=2, value=0)
 
@@ -365,6 +364,7 @@ def main():
     with col_right:
         render_combat_simulator(parsed_templates)
 
+    #st.session_state.attack_templates = raw_dataframe_templates
 
 if __name__ == "__main__":
     main()

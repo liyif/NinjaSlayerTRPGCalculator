@@ -141,7 +141,7 @@ class AttackSequence(NamedTuple):
         return sum(atk.damage.expected_value() for atk in self.attacks)
     
     def __str__(self) -> str:
-        return f"Sequence[{self.size()},{self.total_expected_damage():.1f}]"
+        return f"Attacks[{[atk.damage.expected_value() for atk in self.attacks]}]"
 
     @staticmethod
     def of(*attacks: Attack) -> 'AttackSequence':
