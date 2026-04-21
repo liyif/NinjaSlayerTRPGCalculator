@@ -1,0 +1,2 @@
+# NinjaSlayerTRPGCalculator
+为忍者杀手TRPG的提供的DPS计算器
