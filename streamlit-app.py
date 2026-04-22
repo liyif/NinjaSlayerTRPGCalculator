@@ -356,6 +356,18 @@ def render_combat_simulator(parsed_templates: dict[str, AttackTemplate]):
     st.divider()  # 加一条分割线
     render_trend_chart(attack_plan, num_attack_dice, num_defense_dice)
 
+def render_confront():
+    col1, col2 = st.columns(2)
+    n1 = col1.number_input("甲方骰子数目", min_value=1, max_value=30, value = 8)
+    n2 = col2.number_input("乙方骰子数目", min_value=1, max_value=30, value = 8)
+    d1 = col1.number_input("甲方难度", min_value=1, max_value=6, value=4)
+    d2 = col2.number_input("乙方难度", min_value=1, max_value=6, value=4)
+    from app.confront import compare_dice
+    w1, w2, d = compare_dice(n1, d1, n2, d2)
+    st.write(f"甲方胜率: {w1:.2%}")
+    st.write(f"乙方胜率: {w2:.2%}")
+    st.write(f"平局概率: {d:.2%}")
+
 # ==========================================
 # 页面主入口
 # ==========================================
@@ -363,17 +375,24 @@ def main():
     st.set_page_config(layout="wide", page_title="Combat Simulator")
     init_session_state()
 
-    # 布局分栏
-    col_left, col_right = st.columns(2, gap="large")
+    tab1, tab2 = st.tabs(["攻击计算","对抗计算"])
 
-    with col_left:
-        parsed_templates, raw_dataframe_templates = render_template_editor()
+    with tab1:
 
-    # 侧边栏依赖于左侧解析出的原始DataFrame，所以在左侧渲染后调用
-    render_sidebar(raw_dataframe_templates)
+        # 布局分栏
+        col_left, col_right = st.columns(2, gap="large")
 
-    with col_right:
-        render_combat_simulator(parsed_templates)
+        with col_left:
+            parsed_templates, raw_dataframe_templates = render_template_editor()
+
+        # 侧边栏依赖于左侧解析出的原始DataFrame，所以在左侧渲染后调用
+        render_sidebar(raw_dataframe_templates)
+
+        with col_right:
+            render_combat_simulator(parsed_templates)
+
+    with tab2:
+        render_confront()
 
     #st.session_state.attack_templates = raw_dataframe_templates
 
