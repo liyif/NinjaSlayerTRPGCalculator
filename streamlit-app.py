@@ -31,6 +31,7 @@ COL_CONDITION = "情况"
 COL_DAMAGE = "伤害"
 COL_EVADE_DIFF = "回避难度"
 COL_ATMOSPHERE = "气氛"
+COL_NOTE = "备注"
 
 
 # ==========================================
@@ -118,7 +119,7 @@ def render_template_editor() -> tuple[dict[str, AttackTemplate], dict[str, tuple
                 # 初始化空数据
                 st.session_state.attack_templates[added_template_name] = (
                     pd.DataFrame({COL_DIFFICULTY: []}, dtype=str),
-                    pd.DataFrame({COL_CONDITION: [], COL_DAMAGE: [], COL_EVADE_DIFF: [], COL_ATMOSPHERE: []}, dtype=str),
+                    pd.DataFrame({COL_CONDITION: [], COL_DAMAGE: [], COL_EVADE_DIFF: [], COL_ATMOSPHERE: [], COL_NOTE:[]}, dtype=str),
                 )
 
     # 解析后的数据容器
@@ -258,8 +259,8 @@ def render_combat_simulator(parsed_templates: dict[str, AttackTemplate]):
     st.subheader("攻击计划推演")
 
     col_dice1, col_dice2 = st.columns(2)
-    num_attack_dice = col_dice1.number_input("攻击骰数 (Attack Dice)", min_value=1, max_value=20, value=10)
-    num_defense_dice = col_dice2.number_input("回避骰数 (Defense Dice)", min_value=0, max_value=20, value=8)
+    num_attack_dice = col_dice1.number_input("攻击骰数", min_value=0, max_value=30, value=10)
+    num_defense_dice = col_dice2.number_input("回避骰数", min_value=0, max_value=30, value=8)
 
     atmosphere = st.number_input("气氛", min_value=0, max_value=2, value=0)
 
