@@ -297,8 +297,9 @@ class AttackPlan(NamedTuple):
                 best_alloc = alloc
         nearby = []
         for alloc, damage in result.items():
-            if best_damage - damage <= delta:
+            if best_damage - damage <= best_damage * delta:
                 nearby.append((alloc, damage))
+        nearby.sort(key=lambda t:t[1],reverse=True)
         return best_alloc, best_damage , nearby
 
 
