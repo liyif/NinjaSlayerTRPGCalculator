@@ -307,6 +307,7 @@ def render_combat_simulator(parsed_templates: dict[str, AttackTemplate]):
         with col2:
             st.write("相近分配")
             nearby_df = pd.DataFrame([(str(t[0].allocation),t[1]) for t in nearby], columns=["分配", "期望伤害"])
+            nearby_df['期望伤害'] = nearby_df['期望伤害'].round(6)
             nearby_df = nearby_df.drop_duplicates(subset=["期望伤害"],keep="first")
             st.table(
                 nearby_df
