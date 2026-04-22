@@ -291,6 +291,9 @@ def render_combat_simulator(parsed_templates: dict[str, AttackTemplate]):
     if st.button("1. 计算最佳分配", type="primary"):
         best_alloc, best_damage, nearby = attack_plan.best_allocation(num_attack_dice, num_defense_dice, 0.1)
 
+        if not best_alloc:
+            return
+
         new_alloc_df = pd.DataFrame({
             COL_ALLOCATION: best_alloc.allocation
         }).astype(pd.Int8Dtype())  # 保持类型一致
