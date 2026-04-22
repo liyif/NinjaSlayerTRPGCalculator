@@ -258,7 +258,7 @@ def render_combat_simulator(parsed_templates: dict[str, AttackTemplate]):
     """渲染战斗模拟和期望计算器"""
     st.subheader("攻击计划推演")
 
-    col_dice1, col_dice2, col3 = st.columns(2)
+    col_dice1, col_dice2, col3 = st.columns(3)
     num_attack_dice = col_dice1.number_input("攻击骰数", min_value=0, max_value=30, value=10)
     num_defense_dice = col_dice2.number_input("回避骰数", min_value=0, max_value=30, value=8)
 
