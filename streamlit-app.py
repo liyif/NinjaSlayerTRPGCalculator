@@ -258,11 +258,11 @@ def render_combat_simulator(parsed_templates: dict[str, AttackTemplate]):
     """渲染战斗模拟和期望计算器"""
     st.subheader("攻击计划推演")
 
-    col_dice1, col_dice2 = st.columns(2)
+    col_dice1, col_dice2, col3 = st.columns(2)
     num_attack_dice = col_dice1.number_input("攻击骰数", min_value=0, max_value=30, value=10)
     num_defense_dice = col_dice2.number_input("回避骰数", min_value=0, max_value=30, value=8)
 
-    atmosphere = st.number_input("气氛", min_value=0, max_value=2, value=0)
+    atmosphere = col3.number_input("气氛", min_value=0, max_value=2, value=0)
 
     st.write("#### 制定攻击计划")
 
@@ -289,7 +289,7 @@ def render_combat_simulator(parsed_templates: dict[str, AttackTemplate]):
     st.divider()
 
     if st.button("1. 计算最佳分配", type="primary"):
-        best_alloc, best_damage = attack_plan.best_allocation(num_attack_dice, num_defense_dice)
+        best_alloc, best_damage, nearby = attack_plan.best_allocation(num_attack_dice, num_defense_dice, 0.2)
 
         new_alloc_df = pd.DataFrame({
             COL_ALLOCATION: best_alloc.allocation
@@ -297,11 +297,18 @@ def render_combat_simulator(parsed_templates: dict[str, AttackTemplate]):
 
         st.session_state.attack_allocation = new_alloc_df
 
-        st.success(f"**最佳总期望伤害:** {best_damage:.2f}")
-        st.info(f"**最佳攻击分配:** `{best_alloc.allocation}`")
+        col1, col2 = st.columns(2)
+        with col1:
+            st.success(f"**最佳总期望伤害:** {best_damage:.2f}")
+            st.info(f"**最佳攻击分配:** `{best_alloc.allocation}`")
 
-        # 调试缓存信息
-        st.caption(f"Cache info: {DefenseAllocation.best_allocation.cache_info()}")
+            # 调试缓存信息
+            st.caption(f"Cache info: {DefenseAllocation.best_allocation.cache_info()}")
+        with col2:
+            st.write("相近分配")
+            st.table(
+                [(str(t[0]),t[1]) for t in nearby]
+            )
 
     st.write("#### 详细推演分析")
     edited_allocation = st.data_editor(st.session_state.attack_allocation, num_rows="dynamic")
@@ -312,7 +319,7 @@ def render_combat_simulator(parsed_templates: dict[str, AttackTemplate]):
             total_res = sum(alloc_array)
             attack_allocation_obj = AttackAllocation(allocation=alloc_array, total_resource=total_res)
 
-            st.write("当前采用分配:", attack_allocation_obj.allocation)
+            st.write("当前采用分配:", str(attack_allocation_obj.allocation))
             expanded_plan = attack_plan.expand(allocation=attack_allocation_obj)
 
             result_table = []

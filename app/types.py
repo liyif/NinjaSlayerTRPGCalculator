@@ -284,16 +284,22 @@ class AttackPlan(NamedTuple):
         total_expected_damage = sum(p * DefenseAllocation.best_allocation(seq, total_defense)[1] for p, seq in expanded)
         return total_expected_damage
 
-    def best_allocation(self, total_attack: int, total_defense: int) -> Tuple['AttackAllocation', float]:
+    def best_allocation(self, total_attack: int, total_defense: int, delta: float) -> Tuple['AttackAllocation', float, List[Tuple['AttackAllocation', float]]]:
         allocs = AttackAllocation.distribute(num_attacks=len(self.templates), total_resource=total_attack)
         best_alloc: AttackAllocation | None = None
         best_damage = float('-inf')
+        result = {}
         for alloc in allocs:
             expected_damage = self.calculate_expected_damage(alloc, total_defense=total_defense)
+            result[alloc] = expected_damage
             if expected_damage > best_damage:
                 best_damage = expected_damage
                 best_alloc = alloc
-        return best_alloc, best_damage # type: ignore
+        nearby = []
+        for alloc, damage in result.items():
+            if best_damage - damage <= delta:
+                nearby.append((alloc, damage))
+        return best_alloc, best_damage , nearby
 
 
 
