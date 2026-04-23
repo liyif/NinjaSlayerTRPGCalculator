@@ -38,16 +38,3 @@ def compare_dice(n1, a1, n2, a2):
                 draw += combined_p
                 
     return p1_win, p2_win, draw
-
-# 示例：
-# 甲方：3个骰子，4及以上算成功
-# 乙方：2个骰子，5及以上算成功
-n1, a1 = 10, 5
-n2, a2 = 10, 5
-
-w1, w2, d = compare_dice(n1, a1, n2, a2)
-
-print(f"--- 结果统计 ---")
-print(f"甲方胜率: {w1:.2%}")
-print(f"乙方胜率: {w2:.2%}")
-print(f"平局概率: {d:.2%}")

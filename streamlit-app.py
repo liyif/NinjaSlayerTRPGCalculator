@@ -47,7 +47,7 @@ def init_session_state():
         st.session_state.attack_plan = pd.DataFrame(dtype=str, columns=[COL_TEMPLATE])
 
     if "attack_allocation" not in st.session_state:
-        st.session_state.attack_allocation = pd.DataFrame([], dtype=pd.Int8Dtype, columns=[COL_ALLOCATION])
+        st.session_state.attack_allocation = pd.DataFrame([], columns=[COL_ALLOCATION])
 
 
 # ==========================================

@@ -178,7 +178,7 @@ class DefenseAllocation(NamedTuple):
 
 
     @staticmethod
-    @lru_cache(maxsize=None)
+    @lru_cache(maxsize=512)
     def best_allocation(attacks: AttackSequence, total_resource: int, risk_value: float = 0) -> Tuple['DefenseAllocation', float]:
         """根据攻击序列和风险值选择最佳防守分配方案"""
         if attacks.size() == 0:

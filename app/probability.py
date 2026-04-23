@@ -8,7 +8,6 @@ import numpy as np
 from scipy.stats import binom
 
 
-@lru_cache(maxsize=None)
 def difficulty_success_probability(conditions: Tuple[Tuple[int, int], ...], 
                                    num_dice: int) -> float:
     """
@@ -41,7 +40,7 @@ def difficulty_success_probability(conditions: Tuple[Tuple[int, int], ...],
     return _multiway_difficulty_probability(conditions, num_dice)
 
 
-@lru_cache(maxsize=None)
+@lru_cache(maxsize=512)
 def _multiway_difficulty_probability(conditions: Tuple[Tuple[int, int], ...],
                                      num_dice: int) -> float:
     """多条件难度的概率计算（使用状态机）"""
@@ -75,7 +74,7 @@ def _multiway_difficulty_probability(conditions: Tuple[Tuple[int, int], ...],
     return success_prob / (6 ** num_dice)
 
 
-@lru_cache(maxsize=None)
+@lru_cache(maxsize=512)
 def joint_difficulty_probability(conditions_list: Tuple[Tuple[Tuple[int, int], ...], ...],
                                  num_dice: int) -> Dict[Tuple[bool, ...], float]:
     """
